@@ -6,4 +6,8 @@
   <ItemGroup>
     <Content Update="wwwroot\**\*.*" CopyToPublishDirectory="Never" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DomainModel\DomainModel.csproj" />
+    <ProjectReference Include="..\Repository\Repository.csproj" />
+  </ItemGroup>
 </Project>
