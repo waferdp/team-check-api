@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using DomainModel;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +18,12 @@ namespace Api.Controllers
             _repository = new TeamCheckAnswerRepository(configuration);
         }
 
+        [HttpGet]
+        public IEnumerable<TeamCheckAnswer> ListAnswers()
+        {
+            var answers = _repository.GetAll();
+            return answers;
+        }
 
         [HttpPost]
         public async Task NewSubmission(TeamCheckItem[] checklist)
