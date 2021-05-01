@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DomainModel;
 using Microsoft.AspNetCore.Mvc;
@@ -19,9 +20,17 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<TeamCheckAnswer> ListAnswers()
+        public IEnumerable<TeamCheckAnswer> ListAnswers(DateTime? from, DateTime? to)
         {
             var answers = _repository.GetAll();
+            if(from.HasValue)
+            {
+                answers = answers.Where(answer => answer.Created >= from).ToList();
+            }
+            if(to.HasValue)
+            {
+                answers = answers.Where(answer => answer.Created < to).ToList();
+            }
             return answers;
         }
 
