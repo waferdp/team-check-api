@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Content Update="wwwroot\**\*.*" CopyToPublishDirectory="Never" />
+    <Content Update="wwwroot\**\*.*" CopyToPublishDirectory="Always" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DomainModel\DomainModel.csproj" />
