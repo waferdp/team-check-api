@@ -79,7 +79,7 @@ var PopulateData = new Vue({
             var totalPages = Math.floor(this.result.length / this.pagination.itemsPerPage);
             for (var i = 0; i < totalPages; i++) {
                 var errorsOnPage = validationErrors.filter(error => error.page === i);
-                if(errorsOnPage) {
+                if(errorsOnPage.length) {
                     errors.push(`Question${errorsOnPage.length > 1 ? 's' : ''} ${errorsOnPage.map(error => error.question + 1)} on page ${i+1} ${errorsOnPage.length > 1 ? 'are' : 'is'} not answered`);
                 }
             }
