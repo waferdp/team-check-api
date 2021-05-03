@@ -16,7 +16,7 @@
             <div class="container">
                 <div id="performance-checklist" v-if="hasData">
                     <ul class="list-group gap-3">
-                        <li class="list-group-item bg-light border" v-for="item in getPage().items">
+                        <li class="list-group-item border" v-for="item in getPage().items">
                             <span>{{item.index + 1}}: {{item.key}}</span>
                             <div class="row">
                                 <div class="col-md-3">
@@ -45,14 +45,19 @@
                         <div class="col-md-3">
                             <button type="button" class="btn btn-outline-primary" v-if="!isFirstPage" v-on:click="prevPage">Previous</button>
                         </div>
-                        <div class="offset-md-6 col-md-3">
+                        <div class="offset-md-2 col-md-2">
+                            <span>Page {{pagination.currentPage}}</span>
+                        </div>
+                        <div class="offset-md-2 col-md-3">
                             <button type="button" class="btn btn-outline-primary float-end" v-if="!isLastPage" v-on:click="nextPage">Next</button>
                             <input type="submit" class="btn btn-primary float-end" v-if="isLastPage" v-on:click="sendJsonData">
                         </div>
                     </div>
                     <div class="row" v-if="errors.length">
-                        <div class="alert alert-danger" v-for="error in errors">
-                            {{error}}
+                        <div class="col-md-12" v-for="error in errors">
+                            <div class="alert alert-danger">
+                                {{error}}
+                            </span>
                         </div>
                     </div>
                 </div>
