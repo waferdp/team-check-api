@@ -14,7 +14,6 @@ namespace Repository
     {
         private MongoClient _client;
         private IMongoDatabase _database;
-        private string databaseName;
 
         public TeamCheckAnswerRepository(IConfiguration configuration)
         {
