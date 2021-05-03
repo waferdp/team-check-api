@@ -1,10 +1,6 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
+﻿using System.Linq;
 using DomainModel;
 using Microsoft.Extensions.Configuration;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using System.Threading.Tasks;
 
