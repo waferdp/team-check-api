@@ -56,7 +56,7 @@ var  PopulateData = new Vue({
         },
         fetchJsonData() {
             loading = true;
-            return fetch('http://localhost:5000/content/performance_checklist.json')
+            return fetch('/content/performance_checklist.json')
             .then(res => {
                 return res.json();
             })
@@ -81,7 +81,7 @@ var  PopulateData = new Vue({
                 return;
             }
             console.log(JSON.stringify(this.result));
-            fetch('http://localhost:5000/api/performance-checklist', {
+            fetch('/api/performance-checklist', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
