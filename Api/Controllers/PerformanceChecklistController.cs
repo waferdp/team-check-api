@@ -25,13 +25,13 @@ namespace Api.Controllers
             var answers = _repository.GetAll();
             if(from.HasValue)
             {
-                answers = answers.Where(answer => answer.Created >= from).ToList();
+                answers = answers.Where(answer => answer.Created >= from);
             }
             if(to.HasValue)
             {
-                answers = answers.Where(answer => answer.Created < to).ToList();
+                answers = answers.Where(answer => answer.Created < to);
             }
-            return answers;
+            return answers.ToList();
         }
 
         [HttpPost]

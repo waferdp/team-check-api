@@ -24,17 +24,10 @@ namespace Repository
             _database = _client.GetDatabase(databaseName);
         }
 
-        public List<TeamCheckAnswer> GetAll()
+        public IQueryable<TeamCheckAnswer> GetAll()
         {
-            var documents = _database.GetCollection<BsonDocument>("TeamAnswers").AsQueryable();
-            
-            var answers = new List<TeamCheckAnswer>();
-            foreach(var document in documents)
-            {
-                var answer = BsonSerializer.Deserialize<TeamCheckAnswer>(document);
-                answers.Add(answer);
-            }
-            return answers;
+            var documents = _database.GetCollection<TeamCheckAnswer>("TeamAnswers").AsQueryable();
+            return documents;
         }
 
         public async Task SaveAnswer(TeamCheckAnswer answer)
