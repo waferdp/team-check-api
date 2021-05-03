@@ -1,25 +1,20 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy ASP.Net Core app to Azure Web App - jacob-team-check
+name: Azure App Service - jacob-team-check, Build and deploy DotnetCore app
 
 on:
   push:
     branches:
       - main
-  workflow_dispatch:
-
-defaults:
-  run:
-    shell: bash
-    working-directory: Api
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  build-and-deploy:
+    runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v2
+    # checkout the repo
+    - name: 'Checkout Github Action'
+      uses: actions/checkout@master
+
 
     - name: Set up .NET Core
       uses: actions/setup-dotnet@v1
@@ -32,30 +27,10 @@ jobs:
     - name: dotnet publish
       run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
-    - name: Upload artifact for deployment job
-      uses: actions/upload-artifact@v2
-      with:
-        name: .net-app
-        path: ${{env.DOTNET_ROOT}}/myapp
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: 'production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
-    steps:
-    - name: Download artifact from build job
-      uses: actions/download-artifact@v2
-      with:
-        name: .net-app
-
-    - name: Deploy to Azure Web App
-      id: deploy-to-webapp
+    - name: Run Azure webapp deploy action using publish profile credentials
       uses: azure/webapps-deploy@v2
       with:
-        app-name: 'jacob-team-check'
-        slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_ee956b974d2c445a8bc92671a93e3011 }}
-        package: .
+        app-name: jacob-team-check
+        slot-name: Production
+        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_EA1CEE0A7CBE49D1A7DFB30D6AC11FDB }}
+        package: ${{env.DOTNET_ROOT}}/myapp
