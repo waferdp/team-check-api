@@ -9,6 +9,11 @@ on:
       - main
   workflow_dispatch:
 
+defaults:
+  run:
+    shell: bash
+    working-directory: Api
+
 jobs:
   build:
     runs-on: ubuntu-latest
