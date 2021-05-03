@@ -8,6 +8,7 @@ on:
 
 jobs:
   build-and-deploy:
+    environment: production
     runs-on: windows-latest
 
     steps:
