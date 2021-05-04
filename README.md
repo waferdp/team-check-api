@@ -11,7 +11,7 @@ Total score:
 | ------: | ------------- |
 | >85     | Performing    |
 | 70 - 84 | Norming       |
-| <70     | Forming* or Storming* |
+| <70     | Forming* or Storming** |
 
 \* The group is in Forming Stage if members are tentative, polite and somewhat passive.  
 \*\* The group is in Storming Stage if members are disagreeing with each other or the leader.  
