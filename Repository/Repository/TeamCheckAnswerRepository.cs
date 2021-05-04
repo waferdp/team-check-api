@@ -3,15 +3,16 @@ using DomainModel;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using System.Threading.Tasks;
+using Repository.Interface;
 
-namespace Repository
+namespace Repository.Repository
 {
-    public class TeamCheckAnswerRepository
+    public class TeamCheckAnswerRepository : ITeamCheckAnswerRepository
     {
         private MongoClient _client;
         private IMongoDatabase _database;
 
-        public TeamCheckAnswerRepository(IConfiguration configuration)
+        public TeamCheckAnswerRepository(IConfiguration configuration) 
         {
             var dbConnectionString = configuration["ConnectionStrings:server"];
             var databaseName = configuration["ConnectionStrings:database"];

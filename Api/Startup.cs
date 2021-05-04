@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Repository.Interface;
+using Repository.Repository;
 
 namespace Api
 {
@@ -12,6 +14,7 @@ namespace Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            InjectRepositories(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -30,6 +33,11 @@ namespace Api
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private void InjectRepositories(IServiceCollection services)
+        {
+            services.AddScoped<ITeamCheckAnswerRepository, TeamCheckAnswerRepository>();
         }
     }
 }

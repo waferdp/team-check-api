@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using DomainModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Repository;
+using Repository.Interface;
 
 namespace Api.Controllers
 {
@@ -13,16 +13,16 @@ namespace Api.Controllers
     [ApiController]
     public class PerformanceChecklistController : ControllerBase
     {
-        private TeamCheckAnswerRepository _repository;
-        public PerformanceChecklistController(IConfiguration configuration)
+        private ITeamCheckAnswerRepository _teamCheckAnswerRepository;
+        public PerformanceChecklistController(ITeamCheckAnswerRepository teamCheckAnswerRepository)
         {
-            _repository = new TeamCheckAnswerRepository(configuration);
+            _teamCheckAnswerRepository = teamCheckAnswerRepository;
         }
 
         [HttpGet]
         public IEnumerable<TeamCheckAnswer> ListAnswers(DateTime? from, DateTime? to)
         {
-            var answers = _repository.GetAll();
+            var answers = _teamCheckAnswerRepository.GetAll();
             if(from.HasValue)
             {
                 answers = answers.Where(answer => answer.Created >= from);
@@ -43,7 +43,7 @@ namespace Api.Controllers
                 Created = DateTime.Now,
                 items = checklist
             };
-            await _repository.SaveAnswer(answer);
+            await _teamCheckAnswerRepository.SaveAnswer(answer);
             foreach(var item in checklist)
             {
                 Console.WriteLine(item.Key + ": " + item.Value);
