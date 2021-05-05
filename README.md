@@ -2,7 +2,26 @@
 Team Performance Check evaluates Team Performance according to the four stages of team development.
 The test is composed of 25 questions that are averaged across the team.
 
+## Setup
+### .NET
+
+Install .net core 3.1  
+
+### MongoDB
+Install MongoDB  
+*or* 
+1. Install Docker desktop
+2. Pull docker MongoDB image
+```
+docker pull mongo
+```
+3. Run image and expose standard ports
+```
+docker run -d -p 27017-27019:27017-27019 --name mongodb mongo
+```
+
 ## How to build, run etc
+
 ### Restoring all packages
 ```
 dotnet restore
@@ -15,6 +34,11 @@ dotnet build Api/
 ```
 dotnet run --project Api
 ```
+### Run database (docker container)
+```
+docker start mongodb
+```
+
 ### Publish project
 ```
 dotnet publish project ./Api
