@@ -25,6 +25,7 @@ namespace Api
                     });
             });
             services.AddControllers();
+            services.AddSwaggerGen();
             InjectRepositories(services);
         }
 
@@ -38,9 +39,15 @@ namespace Api
 
             app.UseCors(CorsPolicyAllowEverything);
             app.UseRouting();
-            app.UseDefaultFiles();
-            app.UseStaticFiles();
-
+            app.UseSwagger(options =>
+            {
+                options.SerializeAsV2 = true;
+            });
+            app.UseSwaggerUI(options => 
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "TeamCheck API v1");
+                options.RoutePrefix = string.Empty;
+            });
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
