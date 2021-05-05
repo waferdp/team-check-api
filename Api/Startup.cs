@@ -11,8 +11,19 @@ namespace Api
     {
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        private readonly string CorsPolicyAllowEverything = "allow_everything";
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(CorsPolicyAllowEverything,
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                                .AllowAnyMethod()
+                                .AllowAnyHeader();
+                    });
+            });
             services.AddControllers();
             InjectRepositories(services);
         }
@@ -25,6 +36,7 @@ namespace Api
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors(CorsPolicyAllowEverything);
             app.UseRouting();
             app.UseDefaultFiles();
             app.UseStaticFiles();
