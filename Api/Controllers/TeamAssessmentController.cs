@@ -20,9 +20,7 @@ namespace Api.Controllers
         public TeamAssessment CalculateTeam(DateTime? from, DateTime? to)
         {
             var answers = _teamCheckAnswerRepository.GetAll();
-            var assessment = new TeamAssessment{
-                Average = answers.Average(answer => answer.items.Select(item => item.Value).Sum())
-            };
+            var assessment = new TeamAssessment(answers);
             return assessment;
         }
     }

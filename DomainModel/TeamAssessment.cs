@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using DomainModel;
 
 public class TeamAssessment
@@ -9,4 +11,16 @@ public class TeamAssessment
     public IEnumerable<string> Lowest { get; set; } 
     public IEnumerable<string> Highest { get; set; }
     public IEnumerable<string> Scattered { get; set; }
+
+    public TeamAssessment(IEnumerable<TeamCheckAnswer> answers)
+    {
+        TeamDistribution = answers.ToDictionary(answer => answer.Id.ToString(), elementSelector: (answer => CalculateSum(answer)));
+        Average = TeamDistribution.Values.Average();
+    }
+    
+    private int CalculateSum(TeamCheckAnswer answer)
+    {
+        return answer.items.Select(item => item.Value).Sum();
+    }
+    
 }
