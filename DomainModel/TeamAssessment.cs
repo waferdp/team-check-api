@@ -58,9 +58,9 @@ public class TeamAssessment
     {
         var average = distribution.Values.Average();
         var standardDeviation = CalculateStandardDeviation(distribution.Values);
-        var highLimit = average - standardDeviation;
+        var lowLimit = average - standardDeviation;
 
-        var lowResults = distribution.Where(result => result.Value < average + highLimit)
+        var lowResults = distribution.Where(result => result.Value < average - lowLimit)
             .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
         return lowResults;
     }
