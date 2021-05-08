@@ -7,6 +7,6 @@ namespace DomainModel
     {
         public Guid Id {get; set;}
         public DateTime Created { get; set;}
-        public IEnumerable<TeamCheckItem> items {get; set;} = new List<TeamCheckItem>();
+        public ICollection<TeamCheckItem> items {get; set;} = new List<TeamCheckItem>();
     }
 }
