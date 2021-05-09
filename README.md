@@ -5,7 +5,7 @@ The test is composed of 25 questions that are averaged across the team.
 ## Setup
 ### .NET
 
-Install .net core 3.1  
+Install .NET 5.0  
 
 ### MongoDB
 Install MongoDB  
