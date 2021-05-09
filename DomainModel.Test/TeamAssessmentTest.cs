@@ -9,21 +9,18 @@ namespace DomainModel.Test
     {
         private const int QUESTIONS = 25;
         private Random _randomizer;
-        private IEnumerable<TeamCheckAnswer> _answers;
 
         public TeamAssessmentTest()
         {
             _randomizer = new Random();
-            _answers = GenerateAnswers(_randomizer.Next(5,8));
         }
 
         public void Dispose()
         {
         }
 
-        private IEnumerable<TeamCheckAnswer> GenerateAnswers(int amount)
+        private IEnumerable<TeamCheckAnswer> GenerateRandomAnswers(int amount)
         {
-            var randomizer = new Random();
             var answers = new List<TeamCheckAnswer>();
             for(var i = 0; i < amount; i++)
             {
@@ -32,10 +29,34 @@ namespace DomainModel.Test
             return answers;
         }
 
-        private TeamCheckAnswer GenerateAnswer(int score)
+        private IEnumerable<TeamCheckAnswer> GenerateAnswersOneLowAnswer(int amount)
         {
-            var average = score / QUESTIONS;
-            var rest = score - (average * QUESTIONS);
+            var answers = new List<TeamCheckAnswer>();
+            for(var i = 0; i < amount; i++)
+            {
+                var answer = GenerateAnswer(_randomizer.Next(72, 96), 24);
+                answer.Items.Add(GenerateCheckItem(1, 24));
+                answers.Add(answer);
+            }
+            return answers; 
+        }
+
+        private IEnumerable<TeamCheckAnswer> GenerateAnswersOneHighAnswer(int amount)
+        {
+            var answers = new List<TeamCheckAnswer>();
+            for(var i = 0; i < amount; i++)
+            {
+                var answer = GenerateAnswer(_randomizer.Next(24, 48), 24);
+                answer.Items.Add(GenerateCheckItem(4, 24));
+                answers.Add(answer);
+            }
+            return answers; 
+        }
+
+        private TeamCheckAnswer GenerateAnswer(int score, int questions = QUESTIONS)
+        {
+            var average = score / questions;
+            var rest = score - (average * questions);
 
             var answer = new TeamCheckAnswer
             {
@@ -43,37 +64,74 @@ namespace DomainModel.Test
                 Created = DateTime.Now,
             };
 
-            for(var i = 0; i < QUESTIONS; i++)
+            for(var i = 0; i < questions; i++)
             {
-                var item = new TeamCheckItem
+                var itemScore = average;
+                if(rest > 0)
                 {
-                    Index = i,
-                    Key = $"Random question {i+1}",
-                    Value = average
-                };
-                if(rest > 0) 
-                {
-                    item.Value = average + rest;
-                    rest = 0;
+                    if(rest > 0 && itemScore < 4)
+                    {
+                        itemScore++;
+                        rest--;
+                    }
                 }
-                answer.items.Add(item);
+                answer.Items.Add(GenerateCheckItem(itemScore, i));
             }
-            
             return answer;
         }
 
-        [Fact]
-        public void CalculatesAverage()
+        private TeamCheckItem GenerateCheckItem(int score, int index)
         {
-            var assessment = new TeamAssessment(_answers);
+            return new TeamCheckItem
+            {
+                Index = index,
+                Key = $"Random question {index+1}",
+                Value = score
+            };
+        }
+
+        [Fact]
+        public void CreateTeamAssessment_WithRandomAnswers_CalculatesAverage()
+        {
+            var teamSize = _randomizer.Next(5,8);
+            var answers = GenerateRandomAnswers(teamSize);
+
+            var assessment = new TeamAssessment(answers);
+
             Assert.True(assessment.Average > 0.0);
         }
 
         [Fact]
-        public void CalculatesStandardDeviation()
+        public void CreateTeamAssessment_WithRandomAnswers_CalculatesStandardDeviation()
         {
-            var assessment = new TeamAssessment(_answers);
+            var teamSize = _randomizer.Next(5,8);
+            var answers = GenerateRandomAnswers(teamSize);
+
+            var assessment = new TeamAssessment(answers);
+
             Assert.True(assessment.StandardDeviation > 0.0);
+        }
+
+        [Fact]
+        public void CreateTeamAssessment_WithOneLowAnswer_FindsSingleLowAnswer()
+        {
+            var teamSize = _randomizer.Next(5,8);
+            var answers = GenerateAnswersOneLowAnswer(teamSize);
+
+            var assessment = new TeamAssessment(answers);
+
+            Assert.Single(assessment.Low);
+        }
+
+        [Fact]
+        public void CreateTeamAssessment_WithOneHighwAnswer_FindsSingleHighAnswer()
+        {
+            var teamSize = _randomizer.Next(5,8);
+            var answers = GenerateAnswersOneHighAnswer(teamSize);
+
+            var assessment = new TeamAssessment(answers);
+
+            Assert.Single(assessment.High);
         }
     }
 }

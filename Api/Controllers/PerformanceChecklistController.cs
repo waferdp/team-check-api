@@ -41,7 +41,7 @@ namespace Api.Controllers
             {
                 Id = Guid.NewGuid(),
                 Created = DateTime.Now,
-                items = checklist
+                Items = checklist
             };
             await _teamCheckAnswerRepository.SaveAnswer(answer);
             foreach(var item in checklist)

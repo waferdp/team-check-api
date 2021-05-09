@@ -8,8 +8,8 @@ public class TeamAssessment
     public double Average {get; private set;}
     public double StandardDeviation {get; private set;}
     public Dictionary<string, int> TeamDistribution { get; private set; }
-    public Dictionary<string, int> Low { get; private set; } 
-    public Dictionary<string, int> High { get; private set; }
+    public Dictionary<string, double> Low { get; private set; } 
+    public Dictionary<string, double> High { get; private set; }
 
     public TeamAssessment(IEnumerable<TeamCheckAnswer> answers)
     {
@@ -17,13 +17,13 @@ public class TeamAssessment
 
         Average = TeamDistribution.Values.Average();
         StandardDeviation = CalculateStandardDeviation(TeamDistribution.Values);
-        High = FindHighResults(TeamDistribution);
-        Low = FindLowResults(TeamDistribution);
+        High = FindHighItems(answers);
+        Low = FindLowItems(answers);
     }
     
     private static int CalculateSum(TeamCheckAnswer answer)
     {
-        return answer.items.Select(item => item.Value).Sum();
+        return answer.Items.Select(item => item.Value).Sum();
     }
 
     private static double CalculateStandardDeviation(IEnumerable<int> results)
@@ -43,26 +43,37 @@ public class TeamAssessment
         return standardDeviation;
     }
 
-    private static Dictionary<string, int> FindHighResults(Dictionary<string, int> distribution)
+    private static Dictionary<string, double> FindLowItems(IEnumerable<TeamCheckAnswer> answers)
     {
-        var average = distribution.Values.Average();
-        var standardDeviation = CalculateStandardDeviation(distribution.Values);
-        var highLimit = average + standardDeviation;
-
-        var highResults = distribution.Where(result => result.Value > average + highLimit)
-            .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-        return highResults;
+        return FindOutliers(answers, -1);
     }
 
-    private static Dictionary<string, int> FindLowResults(Dictionary<string, int> distribution)
+    private static Dictionary<string, double> FindHighItems(IEnumerable<TeamCheckAnswer> answers)
     {
-        var average = distribution.Values.Average();
-        var standardDeviation = CalculateStandardDeviation(distribution.Values);
-        var lowLimit = average - standardDeviation;
-
-        var lowResults = distribution.Where(result => result.Value < average - lowLimit)
-            .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-        return lowResults;
+        return FindOutliers(answers, 1);
     }
 
+    private static Dictionary<string, double> FindOutliers(IEnumerable<TeamCheckAnswer> answers, int comparison)
+    {
+        var allAnswers = answers.SelectMany(answer => answer.Items.Select(item => item.Value));
+        var averageScore = allAnswers.Average();
+        var standardDeviation = CalculateStandardDeviation(allAnswers);
+
+        var questions = answers.Select(answer => answer.Items.Count()).FirstOrDefault();
+        var foundItems = new Dictionary<string, double>();
+        
+        var limit = comparison < 0 ? averageScore - standardDeviation : averageScore + standardDeviation;
+
+        for(var i = 0; i < questions; i++)
+        {
+            var replies = answers.SelectMany(answer => answer.Items.Where(item => item.Index == i));
+            var itemAverage = replies.Average(reply => reply.Value);
+            
+            if(itemAverage.CompareTo(limit) == comparison)
+            {
+                foundItems[replies.First().Key] = itemAverage;
+            }
+        }
+        return foundItems;
+    }
 }
