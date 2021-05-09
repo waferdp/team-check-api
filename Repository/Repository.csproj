@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\DomainModel\DomainModel.csproj" />
+    <ProjectReference Include="..\Repository.Interface\Repository.Interface.csproj" />
   </ItemGroup>
 
   <ItemGroup>

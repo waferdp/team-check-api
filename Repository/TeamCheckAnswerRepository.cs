@@ -5,7 +5,7 @@ using MongoDB.Driver;
 using System.Threading.Tasks;
 using Repository.Interface;
 
-namespace Repository.Repository
+namespace Repository
 {
     public class TeamCheckAnswerRepository : ITeamCheckAnswerRepository
     {
