@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Repository.Interface;
 using Repository;
+using DomainModel;
 
 namespace Api
 {
@@ -56,7 +57,7 @@ namespace Api
 
         private void InjectRepositories(IServiceCollection services)
         {
-            services.AddScoped<ITeamCheckAnswerRepository, TeamCheckAnswerRepository>();
+            services.AddScoped<IRepository<TeamCheckAnswer>, TeamCheckAnswerRepository>();
         }
     }
 }
