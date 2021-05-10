@@ -1,9 +1,11 @@
 ﻿using System.Linq;
 using DomainModel;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using System.Threading.Tasks;
 using Repository.Interface;
+using System;
 
 namespace Repository
 {
@@ -11,9 +13,11 @@ namespace Repository
     {
         private MongoClient _client;
         private IMongoDatabase _database;
+        private ILogger<TeamCheckAnswerRepository> _logger;
 
-        public TeamCheckAnswerRepository(IConfiguration configuration) 
+        public TeamCheckAnswerRepository(IConfiguration configuration, ILogger<TeamCheckAnswerRepository> logger) 
         {
+            _logger = logger;
             var dbConnectionString = configuration["ConnectionStrings:server"];
             var databaseName = configuration["ConnectionStrings:database"];
             _client = new MongoClient(dbConnectionString);
@@ -22,14 +26,29 @@ namespace Repository
 
         public IQueryable<TeamCheckAnswer> GetAll()
         {
-            var documents = _database.GetCollection<TeamCheckAnswer>("TeamAnswers").AsQueryable();
-            return documents;
+            _logger.LogInformation($"Retrieving all TeamCheckAnswers from MongoDB ({_database.DatabaseNamespace})");
+            try
+            {
+                var documents = _database.GetCollection<TeamCheckAnswer>("TeamAnswers").AsQueryable();
+                return documents;
+            } catch(MongoException ex)
+            {
+                _logger.LogError($"Error retrieving TeamCheckAnswers {ex.Message}", ex);
+                throw;
+            }
         }
 
         public async Task SaveAnswer(TeamCheckAnswer answer)
         {
-            var collection = _database.GetCollection<TeamCheckAnswer>("TeamAnswers");
-            await collection.InsertOneAsync(answer);
+            try
+            {
+                var collection = _database.GetCollection<TeamCheckAnswer>("TeamAnswers");
+                await collection.InsertOneAsync(answer);
+            } catch(MongoException ex)
+            {
+                _logger.LogError($"Error saving TeamCheckAnswer {ex.Message}", ex);
+                throw;
+            }
         }
     }
 }
