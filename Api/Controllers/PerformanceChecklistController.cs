@@ -22,7 +22,7 @@ namespace Api.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         public TeamCheckAnswer GetAnswer(Guid id)
         {
             _logger.LogInformation($"Get team check answer using id");
