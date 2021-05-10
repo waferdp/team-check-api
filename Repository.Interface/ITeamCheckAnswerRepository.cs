@@ -7,6 +7,6 @@ namespace Repository.Interface
     public interface ITeamCheckAnswerRepository
     {
         IQueryable<TeamCheckAnswer> GetAll();
-        Task SaveAnswer(TeamCheckAnswer answer);
+        Task<TeamCheckAnswer> SaveAnswer(TeamCheckAnswer answer);
     }
 }

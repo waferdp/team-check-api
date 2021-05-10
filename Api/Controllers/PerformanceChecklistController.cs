@@ -39,20 +39,14 @@ namespace Api.Controllers
         }
 
         [HttpPost]
-        public async Task NewSubmission(TeamCheckItem[] checklist)
+        public async Task<TeamCheckAnswer> NewSubmission(TeamCheckItem[] checklist)
         {
             _logger.LogInformation($"Create new team check answer");
             var answer = new TeamCheckAnswer
             {
-                Id = Guid.NewGuid(),
-                Created = DateTime.Now,
                 Items = checklist
             };
-            await _teamCheckAnswerRepository.SaveAnswer(answer);
-            foreach(var item in checklist)
-            {
-                Console.WriteLine(item.Key + ": " + item.Value);
-            }
+            return await _teamCheckAnswerRepository.SaveAnswer(answer);
         }
     }
 }

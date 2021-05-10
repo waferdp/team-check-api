@@ -38,12 +38,18 @@ namespace Repository
             }
         }
 
-        public async Task SaveAnswer(TeamCheckAnswer answer)
+        public async Task<TeamCheckAnswer> SaveAnswer(TeamCheckAnswer answer)
         {
             try
             {
+                if (answer.Id == Guid.Empty)
+                {
+                    answer.Id = Guid.NewGuid();
+                    answer.Created = DateTime.Now;
+                }
                 var collection = _database.GetCollection<TeamCheckAnswer>("TeamAnswers");
                 await collection.InsertOneAsync(answer);
+                return answer;
             } catch(MongoException ex)
             {
                 _logger.LogError($"Error saving TeamCheckAnswer {ex.Message}", ex);
