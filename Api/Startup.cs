@@ -57,7 +57,8 @@ namespace Api
 
         private void InjectRepositories(IServiceCollection services)
         {
-            services.AddScoped<IRepository<TeamCheckAnswer>, TeamCheckAnswerRepository>();
+            services.AddScoped<IRepository<Team>, SimpleRepository<Team>>();
+            services.AddScoped<IRepository<TeamAnswer>, SimpleRepository<TeamAnswer>>();
         }
     }
 }

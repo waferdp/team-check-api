@@ -13,24 +13,24 @@ namespace Api.Controllers
     [ApiController]
     public class PerformanceChecklistController : ControllerBase
     {
-        private IRepository<TeamCheckAnswer> _teamCheckAnswerRepository;
+        private IRepository<TeamAnswer> _teamCheckAnswerRepository;
         private ILogger<PerformanceChecklistController> _logger;
 
-        public PerformanceChecklistController(IRepository<TeamCheckAnswer> teamCheckAnswerRepository, ILogger<PerformanceChecklistController> logger)
+        public PerformanceChecklistController(IRepository<TeamAnswer> teamCheckAnswerRepository, ILogger<PerformanceChecklistController> logger)
         {
             _teamCheckAnswerRepository = teamCheckAnswerRepository;
             _logger = logger;
         }
 
         [HttpGet("{id}")]
-        public TeamCheckAnswer GetAnswer(Guid id)
+        public TeamAnswer GetAnswer(Guid id)
         {
             _logger.LogInformation($"Get team check answer using id");
             return _teamCheckAnswerRepository.Get(id);
         }
 
         [HttpGet]
-        public IEnumerable<TeamCheckAnswer> ListAnswers(DateTime? from, DateTime? to)
+        public IEnumerable<TeamAnswer> ListAnswers(DateTime? from, DateTime? to)
         {
             _logger.LogInformation($"Get team check answers");
             var answers = _teamCheckAnswerRepository.GetAll();
@@ -46,10 +46,10 @@ namespace Api.Controllers
         }
 
         [HttpPost]
-        public async Task<TeamCheckAnswer> NewSubmission(TeamCheckItem[] checklist)
+        public async Task<TeamAnswer> NewSubmission(TeamCheckItem[] checklist)
         {
             _logger.LogInformation($"Create new team check answer");
-            var answer = new TeamCheckAnswer
+            var answer = new TeamAnswer
             {
                 Items = checklist
             };

@@ -11,7 +11,7 @@ public class TeamAssessment
     public Dictionary<string, double> Low { get; private set; } 
     public Dictionary<string, double> High { get; private set; }
 
-    public TeamAssessment(IEnumerable<TeamCheckAnswer> answers)
+    public TeamAssessment(IEnumerable<TeamAnswer> answers)
     {
         TeamDistribution = answers.ToDictionary(answer => answer.Id.ToString(), elementSelector: (answer => CalculateSum(answer)));
 
@@ -21,7 +21,7 @@ public class TeamAssessment
         Low = FindLowItems(answers);
     }
     
-    private static int CalculateSum(TeamCheckAnswer answer)
+    private static int CalculateSum(TeamAnswer answer)
     {
         return answer.Items.Select(item => item.Value).Sum();
     }
@@ -43,17 +43,17 @@ public class TeamAssessment
         return standardDeviation;
     }
 
-    private static Dictionary<string, double> FindLowItems(IEnumerable<TeamCheckAnswer> answers)
+    private static Dictionary<string, double> FindLowItems(IEnumerable<TeamAnswer> answers)
     {
         return FindOutliers(answers, -1);
     }
 
-    private static Dictionary<string, double> FindHighItems(IEnumerable<TeamCheckAnswer> answers)
+    private static Dictionary<string, double> FindHighItems(IEnumerable<TeamAnswer> answers)
     {
         return FindOutliers(answers, 1);
     }
 
-    private static Dictionary<string, double> FindOutliers(IEnumerable<TeamCheckAnswer> answers, int comparison)
+    private static Dictionary<string, double> FindOutliers(IEnumerable<TeamAnswer> answers, int comparison)
     {
         var allAnswers = answers.SelectMany(answer => answer.Items.Select(item => item.Value));
         var averageScore = allAnswers.Average();

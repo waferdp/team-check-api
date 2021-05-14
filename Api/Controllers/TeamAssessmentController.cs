@@ -1,4 +1,5 @@
 using System;
+using DomainModel;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Interface;
 
@@ -8,17 +9,17 @@ namespace Api.Controllers
     [ApiController]
     public class TeamAssessmentController : ControllerBase
     {
-        private ITeamCheckAnswerRepository _teamCheckAnswerRepository;
+        private IRepository<TeamAnswer> _teamAnswerRepository;
 
-        public TeamAssessmentController(ITeamCheckAnswerRepository teamCheckAnswerRepository)
+        public TeamAssessmentController(IRepository<TeamAnswer> teamAnswerRepository)
         {
-            _teamCheckAnswerRepository = teamCheckAnswerRepository;
+            _teamAnswerRepository = teamAnswerRepository;
         }
 
         [HttpGet]
         public TeamAssessment CalculateTeam(DateTime? from, DateTime? to)
         {
-            var answers = _teamCheckAnswerRepository.GetAll();
+            var answers = _teamAnswerRepository.GetAll();
             var assessment = new TeamAssessment(answers);
             return assessment;
         }

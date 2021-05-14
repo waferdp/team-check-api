@@ -19,9 +19,9 @@ namespace DomainModel.Test
         {
         }
 
-        private IEnumerable<TeamCheckAnswer> GenerateRandomAnswers(int amount)
+        private IEnumerable<TeamAnswer> GenerateRandomAnswers(int amount)
         {
-            var answers = new List<TeamCheckAnswer>();
+            var answers = new List<TeamAnswer>();
             for(var i = 0; i < amount; i++)
             {
                 answers.Add(GenerateAnswer(_randomizer.Next(25, 100)));
@@ -29,9 +29,9 @@ namespace DomainModel.Test
             return answers;
         }
 
-        private IEnumerable<TeamCheckAnswer> GenerateAnswersOneLowAnswer(int amount)
+        private IEnumerable<TeamAnswer> GenerateAnswersOneLowAnswer(int amount)
         {
-            var answers = new List<TeamCheckAnswer>();
+            var answers = new List<TeamAnswer>();
             for(var i = 0; i < amount; i++)
             {
                 var answer = GenerateAnswer(_randomizer.Next(72, 96), 24);
@@ -41,9 +41,9 @@ namespace DomainModel.Test
             return answers; 
         }
 
-        private IEnumerable<TeamCheckAnswer> GenerateAnswersOneHighAnswer(int amount)
+        private IEnumerable<TeamAnswer> GenerateAnswersOneHighAnswer(int amount)
         {
-            var answers = new List<TeamCheckAnswer>();
+            var answers = new List<TeamAnswer>();
             for(var i = 0; i < amount; i++)
             {
                 var answer = GenerateAnswer(_randomizer.Next(24, 48), 24);
@@ -53,12 +53,12 @@ namespace DomainModel.Test
             return answers; 
         }
 
-        private TeamCheckAnswer GenerateAnswer(int score, int questions = QUESTIONS)
+        private TeamAnswer GenerateAnswer(int score, int questions = QUESTIONS)
         {
             var average = score / questions;
             var rest = score - (average * questions);
 
-            var answer = new TeamCheckAnswer
+            var answer = new TeamAnswer
             {
                 Id = Guid.NewGuid(),
                 Created = DateTime.Now,
