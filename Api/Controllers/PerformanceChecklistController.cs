@@ -13,13 +13,20 @@ namespace Api.Controllers
     [ApiController]
     public class PerformanceChecklistController : ControllerBase
     {
-        private ITeamCheckAnswerRepository _teamCheckAnswerRepository;
+        private IRepository<TeamCheckAnswer> _teamCheckAnswerRepository;
         private ILogger<PerformanceChecklistController> _logger;
 
-        public PerformanceChecklistController(ITeamCheckAnswerRepository teamCheckAnswerRepository, ILogger<PerformanceChecklistController> logger)
+        public PerformanceChecklistController(IRepository<TeamCheckAnswer> teamCheckAnswerRepository, ILogger<PerformanceChecklistController> logger)
         {
             _teamCheckAnswerRepository = teamCheckAnswerRepository;
             _logger = logger;
+        }
+
+        [HttpGet("{id}")]
+        public TeamCheckAnswer GetAnswer(Guid id)
+        {
+            _logger.LogInformation($"Get team check answer using id");
+            return _teamCheckAnswerRepository.Get(id);
         }
 
         [HttpGet]
@@ -46,7 +53,7 @@ namespace Api.Controllers
             {
                 Items = checklist
             };
-            return await _teamCheckAnswerRepository.SaveAnswer(answer);
+            return await _teamCheckAnswerRepository.SaveAsync(answer);
         }
     }
 }
