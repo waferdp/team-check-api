@@ -6,6 +6,7 @@ using Repository.Interface;
 
 namespace Api.Controllers 
 {
+    [Route("api/team")]
     public class TeamController : ControllerBase
     {
         private IRepository<Team> _teamRepository;

@@ -98,7 +98,7 @@ namespace Repository
 
         private string GetTypeName()
         {
-            return typeof(T).GetType().Name;     
+            return typeof(T).Name;     
         }
     }
 }
