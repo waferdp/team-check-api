@@ -5,7 +5,7 @@ using Repository.Interface;
 
 namespace Api.Controllers
 {
-    [Route("api/team-assessment")]
+    [Route("api/team-assessments")]
     [ApiController]
     public class TeamAssessmentController : ControllerBase
     {
