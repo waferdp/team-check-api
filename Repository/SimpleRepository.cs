@@ -29,8 +29,8 @@ namespace Repository
             _logger.LogInformation($"Retrieving specific { GetTypeName() } from MongoDB ({_database.DatabaseNamespace})");
             try
             {
-                var documents = _database.GetCollection<T>(GetCollectionName()).AsQueryable();
-                var result = documents.FirstOrDefault(entity => entity.Id == id);
+                var documents = _database.GetCollection<T>(GetCollectionName());
+                var result = documents.Find(CreateIdFilter(id)).FirstOrDefault();
                 return result;
             }
             catch(MongoException ex)
@@ -60,13 +60,16 @@ namespace Repository
             _logger.LogInformation($"Saving new { GetTypeName() } in MongoDB ({_database.DatabaseNamespace})");
             try
             {
-                if (entity.Id == Guid.Empty)
-                {
-                    entity.Id = Guid.NewGuid();
-                    entity.Created = DateTime.Now;
-                }
+                var idFilter = CreateIdFilter(entity.Id);
                 var collection = _database.GetCollection<T>(GetCollectionName());
-                await collection.InsertOneAsync(entity);
+                if(collection.Find(idFilter).Any())
+                {
+                    await collection.ReplaceOneAsync(CreateIdFilter(entity.Id), entity);
+                }
+                else
+                {
+                    await collection.InsertOneAsync(entity);
+                }
                 return entity;
             }
             catch(MongoException ex)
@@ -82,13 +85,17 @@ namespace Repository
             try
             {
                 var collection = _database.GetCollection<T>(GetCollectionName());
-                var idFilter = Builders<T>.Filter.Eq("_id", id);
-                await collection.DeleteOneAsync(idFilter);
+                await collection.DeleteOneAsync(CreateIdFilter(id));
             } catch (MongoException ex)
             {
                 _logger.LogError($"Error deleting entity with Id {id}: {ex.Message}", ex);
                 throw;
             }
+        }
+
+        private FilterDefinition<T> CreateIdFilter(Guid id)
+        {
+            return Builders<T>.Filter.Eq("_id", id);
         }
 
         private string GetCollectionName()
