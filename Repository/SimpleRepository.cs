@@ -29,7 +29,7 @@ namespace Repository
             _logger.LogInformation($"Retrieving specific { GetTypeName() } from MongoDB ({_database.DatabaseNamespace})");
             try
             {
-                var documents = _database.GetCollection<T>(GetCollectionName());
+                var documents = GetCollection();
                 var result = documents.Find(CreateIdFilter(id)).FirstOrDefault();
                 return result;
             }
@@ -45,7 +45,7 @@ namespace Repository
             _logger.LogInformation($"Retrieving all { GetTypeName() } from MongoDB ({_database.DatabaseNamespace})");
             try
             {
-                var documents = _database.GetCollection<T>(GetCollectionName()).AsQueryable();
+                var documents = GetCollection().AsQueryable();
                 return documents;
             } 
             catch(MongoException ex)
@@ -61,7 +61,7 @@ namespace Repository
             try
             {
                 var idFilter = CreateIdFilter(entity.Id);
-                var collection = _database.GetCollection<T>(GetCollectionName());
+                var collection = GetCollection();
                 if(collection.Find(idFilter).Any())
                 {
                     await collection.ReplaceOneAsync(CreateIdFilter(entity.Id), entity);
@@ -84,7 +84,7 @@ namespace Repository
             _logger.LogInformation($"Deleting {GetTypeName()} in MongoDB ({_database.DatabaseNamespace})");
             try
             {
-                var collection = _database.GetCollection<T>(GetCollectionName());
+                var collection = GetCollection();
                 await collection.DeleteOneAsync(CreateIdFilter(id));
             } catch (MongoException ex)
             {
@@ -93,7 +93,12 @@ namespace Repository
             }
         }
 
-        private FilterDefinition<T> CreateIdFilter(Guid id)
+        protected IMongoCollection<T> GetCollection()
+        {
+            return _database.GetCollection<T>(GetCollectionName());
+        }
+
+        protected FilterDefinition<T> CreateIdFilter(Guid id)
         {
             return Builders<T>.Filter.Eq("_id", id);
         }
