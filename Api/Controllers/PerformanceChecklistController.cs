@@ -30,30 +30,18 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<TeamAnswer> ListAnswers(DateTime? from, DateTime? to)
+        public IEnumerable<TeamAnswer> ListAnswers([FromQuery]TeamQuery query)
         {
             _logger.LogInformation($"Get team answers");
             var answers = _teamAnswerRepository.GetAll();
-            if(from.HasValue)
-            {
-                answers = answers.Where(answer => answer.Created >= from);
-            }
-            if(to.HasValue)
-            {
-                answers = answers.Where(answer => answer.Created < to);
-            }
-            return answers.ToList();
+            return query.Match(answers);
         }
 
         [HttpPost]
-        public async Task<TeamAnswer> NewSubmission(TeamCheckItem[] checklist)
+        public async Task<TeamAnswer> NewSubmission(TeamAnswer teamAnswer)
         {
             _logger.LogInformation($"Create new team answer");
-            var answer = new TeamAnswer
-            {
-                Items = checklist
-            };
-            return await _teamAnswerRepository.SaveAsync(answer);
+            return await _teamAnswerRepository.SaveAsync(teamAnswer);
         }
     }
 }

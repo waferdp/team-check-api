@@ -12,7 +12,8 @@ namespace Repository
     {
         private ILogger<TeamRepository> _logger;
 
-        public TeamRepository(IConfiguration configuration, ILogger<TeamRepository> logger) : base (configuration, logger)
+        public TeamRepository(IConfiguration configuration, ILogger<TeamRepository> logger) 
+        : base (configuration, logger)
         {
             _logger = logger;
         }

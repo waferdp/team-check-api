@@ -17,10 +17,11 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        public TeamAssessment CalculateTeam(DateTime? from, DateTime? to)
+        public TeamAssessment CalculateTeam(TeamQuery query)
         {
             var answers = _teamAnswerRepository.GetAll();
-            var assessment = new TeamAssessment(answers);
+            var matched = query.Match(answers);
+            var assessment = new TeamAssessment(matched);
             return assessment;
         }
     }
