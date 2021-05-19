@@ -19,6 +19,7 @@ namespace Repository
 
         public async Task<Team> AddMember(Guid teamId, Member member)
         {
+            _logger.LogInformation("Updating team, adding team member");
             var collection = GetCollection();
             var idFilter = CreateIdFilter(teamId);
             var addMemberDefinition = Builders<Team>.Update.Push<Member>(t => t.Members, member);
@@ -28,6 +29,7 @@ namespace Repository
 
         public async Task<Team> RemoveMember(Guid teamId, Guid memberId)
         {
+            _logger.LogInformation("Updating team, removing team member");
             var collection = GetCollection();
             var idFilter = CreateIdFilter(teamId);
             var memberPullFilter = Builders<Team>.Update.PullFilter<Member>(t => t.Members, member => member.Id == memberId);

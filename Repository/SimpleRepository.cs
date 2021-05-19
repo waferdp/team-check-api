@@ -40,6 +40,22 @@ namespace Repository
             }
         }
 
+        public async Task<T> GetAsync(Guid id)
+        {
+            _logger.LogInformation($"Retrieving specific { GetTypeName() } from MongoDB ({_database.DatabaseNamespace})");
+            try
+            {
+                var documents = GetCollection();
+                var result = await (await documents.FindAsync<T>(CreateIdFilter(id))).FirstOrDefaultAsync();
+                return result;
+            }
+            catch(MongoException ex)
+            {
+                _logger.LogError($"Error retrieving entity with Id {id}: {ex.Message}", ex);
+                throw;
+            }
+        }
+
         public IQueryable<T> GetAll()
         {
             _logger.LogInformation($"Retrieving all { GetTypeName() } from MongoDB ({_database.DatabaseNamespace})");
