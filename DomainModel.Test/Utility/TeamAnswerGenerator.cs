@@ -18,6 +18,7 @@ namespace DomainModel.UtiliTest
         public IEnumerable<TeamAnswer> GenerateRandomAnswers(int? amount = null, Guid? teamId = null)
         {
             var answers = new List<TeamAnswer>();
+            amount = amount ?? _teamSize;
             for(var i = 0; i < amount; i++)
             {
                 answers.Add(GenerateAnswer(_randomizer.Next(25, 100), teamId: teamId));
@@ -28,6 +29,7 @@ namespace DomainModel.UtiliTest
         public IEnumerable<TeamAnswer> GenerateAnswersOneLowAnswer(int? amount = null)
         {
             var answers = new List<TeamAnswer>();
+            amount = amount ?? _teamSize;
             for(var i = 0; i < amount; i++)
             {
                 var answer = GenerateAnswer(_randomizer.Next(72, 96), 24);
@@ -40,6 +42,7 @@ namespace DomainModel.UtiliTest
         public IEnumerable<TeamAnswer> GenerateAnswersOneHighAnswer(int? amount = null)
         {
             var answers = new List<TeamAnswer>();
+            amount = amount ?? _teamSize;
             for(var i = 0; i < amount; i++)
             {
                 var answer = GenerateAnswer(_randomizer.Next(24, 48), 24);
