@@ -30,19 +30,12 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<TeamAnswer> ListAnswers(DateTime? from, DateTime? to)
+        public IEnumerable<TeamAnswer> ListAnswers([FromQuery]TeamQuery query)
         {
             _logger.LogInformation($"Get team answers");
             var answers = _teamAnswerRepository.GetAll();
-            if(from.HasValue)
-            {
-                answers = answers.Where(answer => answer.Created >= from);
-            }
-            if(to.HasValue)
-            {
-                answers = answers.Where(answer => answer.Created < to);
-            }
-            return answers.ToList();
+            return query.Match(answers);
+
         }
 
         [HttpPost]
