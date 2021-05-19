@@ -24,10 +24,10 @@ namespace DomainModel
             }
             if(TeamId != Guid.Empty)
             {
-                var teamIds =  matched.Select(answer => answer.TeamId);
-                matched = matched.Where(answer => answer.TeamId == this.TeamId);
+                //Ugly hack to work around Mongo driver and Linq not working well with UUIDs
+                return matched.ToList().Where(answer => answer.TeamId == TeamId);
             }
-            return matched.ToList();
+            return matched;
         }
     }
 }
