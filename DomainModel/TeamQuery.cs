@@ -8,9 +8,9 @@ namespace DomainModel
     {
         public DateTime? From { get; set; }
         public DateTime? To { get; set; }
-        public Guid TeamId { get; set; }
+        public Guid? TeamId { get; set; }
 
-        public IEnumerable<TeamAnswer> Match(IQueryable<TeamAnswer> answers)
+        public virtual IQueryable<TeamAnswer> Match(IQueryable<TeamAnswer> answers)
         {
             //Avoid state mutation
             var matched = answers;
@@ -22,10 +22,10 @@ namespace DomainModel
             {
                 matched = matched.Where(answer => answer.Created < To);
             }
-            if(TeamId != Guid.Empty)
+            if(TeamId.HasValue)
             {
-                //Ugly hack to work around Mongo driver and Linq not working well with UUIDs
-                return matched.ToList().Where(answer => answer.TeamId == TeamId);
+                var teamIdString = TeamId.ToString();
+                matched = matched.Where(answer => answer.TeamId == TeamId);
             }
             return matched;
         }

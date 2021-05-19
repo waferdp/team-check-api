@@ -35,18 +35,13 @@ namespace Api.Controllers
             _logger.LogInformation($"Get team answers");
             var answers = _teamAnswerRepository.GetAll();
             return query.Match(answers);
-
         }
 
         [HttpPost]
-        public async Task<TeamAnswer> NewSubmission(TeamCheckItem[] checklist)
+        public async Task<TeamAnswer> NewSubmission(TeamAnswer teamAnswer)
         {
             _logger.LogInformation($"Create new team answer");
-            var answer = new TeamAnswer
-            {
-                Items = checklist
-            };
-            return await _teamAnswerRepository.SaveAsync(answer);
+            return await _teamAnswerRepository.SaveAsync(teamAnswer);
         }
     }
 }

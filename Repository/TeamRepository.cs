@@ -4,19 +4,21 @@ using DomainModel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
+using Repository.Interface;
 
 namespace Repository
 {
-    public class TeamRepository : SimpleRepository<Team>
+    public class TeamRepository : SimpleRepository<Team>, ITeamRepository
     {
         private ILogger<TeamRepository> _logger;
 
-        public TeamRepository(IConfiguration configuration, ILogger<TeamRepository> logger) : base (configuration, logger)
+        public TeamRepository(IConfiguration configuration, ILogger<TeamRepository> logger) 
+        : base (configuration, logger)
         {
             _logger = logger;
         }
 
-        public async Task<Team> AddMemberToTeam(Guid teamId, Member member)
+        public async Task<Team> AddMember(Guid teamId, Member member)
         {
             var collection = GetCollection();
             var idFilter = CreateIdFilter(teamId);
@@ -25,7 +27,7 @@ namespace Repository
             return base.Get(teamId);
         }
 
-        public async Task<Team> RemoveMemberFromTeam(Guid teamId, Guid memberId)
+        public async Task<Team> RemoveMember(Guid teamId, Guid memberId)
         {
             var collection = GetCollection();
             var idFilter = CreateIdFilter(teamId);
