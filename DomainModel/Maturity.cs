@@ -12,23 +12,23 @@ namespace DomainModel
             Performing
         }
 
-        public static DevelopmentStage AtStage(int score)
+        public static string AtStage(double score)
         {
-            if(score < 25 || score > 100)
+            if(score < 25.0 || score > 100.0)
             {
                 throw new Exception($"Minimum score: 25, maximum score: 100. Actual score {score}");
             }
-            if(score < 70)
+            if(score < 70.0)
             {
-                return DevelopmentStage.FormingStorming;
+                return DevelopmentStage.FormingStorming.ToString();
             }
-            else if(score <85)
+            else if(score <85.0)
             {
-                return DevelopmentStage.Norming;
+                return DevelopmentStage.Norming.ToString();
             }
             else
             {
-                return DevelopmentStage.Performing;
+                return DevelopmentStage.Performing.ToString();
             }
         }
     }

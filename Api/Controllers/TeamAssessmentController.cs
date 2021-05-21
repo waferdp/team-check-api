@@ -17,7 +17,7 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        public TeamAssessment CalculateTeam(TeamQuery query)
+        public TeamAssessment CalculateTeam([FromQuery] TeamQuery query)
         {
             var answers = _teamAnswerRepository.GetAll();
             var matched = query.Match(answers);
