@@ -50,5 +50,13 @@ namespace DomainModel.Test
             var assessment = new TeamAssessment(answers);
             Assert.Single(assessment.High);
         }
+
+        [Fact]
+        public void CreateTeamAssessment_WithNoAnswers_DoesntCrash()
+        {
+            var answers = new List<TeamAnswer>();
+            var assessment = new TeamAssessment(answers);
+            Assert.NotNull(assessment);
+        }
     }
 }

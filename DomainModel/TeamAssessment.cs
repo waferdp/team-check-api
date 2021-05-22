@@ -18,14 +18,27 @@ namespace DomainModel
 
         public TeamAssessment(IEnumerable<TeamAnswer> answers)
         {
+            if(!answers.Any()) {
+                CreateEmptyAssessment();
+                return;
+            }
+            
             TeamDistribution = answers.ToDictionary(answer => answer.Id.ToString(), elementSelector: (answer => CalculateSum(answer)));
-
             Average = TeamDistribution.Values.Average();
             StandardDeviation = CalculateStandardDeviation(TeamDistribution.Values);
             High = FindHighItems(answers);
             Low = FindLowItems(answers);
         }
-        
+
+        private void CreateEmptyAssessment()
+        {
+            Average = 0.0;
+            StandardDeviation = 0.0;
+            TeamDistribution = new Dictionary<string, int>();
+            Low = new List<TeamAssessmentItem>();
+            High = new List<TeamAssessmentItem>();
+        }
+
         private static int CalculateSum(TeamAnswer answer)
         {
             return answer.Items.Select(item => item.Value).Sum();
