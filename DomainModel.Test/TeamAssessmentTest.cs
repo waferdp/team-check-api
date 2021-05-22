@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Xunit;
 using DomainModel;
 using DomainModel.UtiliTest;
+using System.Text.Json;
 
 namespace DomainModel.Test
 {
@@ -56,7 +57,8 @@ namespace DomainModel.Test
         {
             var answers = new List<TeamAnswer>();
             var assessment = new TeamAssessment(answers);
-            Assert.NotNull(assessment);
+            var serialized = JsonSerializer.Serialize(assessment);
+            Assert.NotEmpty(serialized);
         }
     }
 }

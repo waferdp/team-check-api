@@ -22,7 +22,7 @@ namespace DomainModel
                 CreateEmptyAssessment();
                 return;
             }
-            
+
             TeamDistribution = answers.ToDictionary(answer => answer.Id.ToString(), elementSelector: (answer => CalculateSum(answer)));
             Average = TeamDistribution.Values.Average();
             StandardDeviation = CalculateStandardDeviation(TeamDistribution.Values);
@@ -32,7 +32,7 @@ namespace DomainModel
 
         private void CreateEmptyAssessment()
         {
-            Average = 0.0;
+            Average = 50.0;
             StandardDeviation = 0.0;
             TeamDistribution = new Dictionary<string, int>();
             Low = new List<TeamAssessmentItem>();
