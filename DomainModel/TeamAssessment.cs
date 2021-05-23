@@ -19,8 +19,7 @@ namespace DomainModel
         public TeamAssessment(IEnumerable<TeamAnswer> answers)
         {
             if(!answers.Any()) {
-                CreateEmptyAssessment();
-                return;
+                throw new ArgumentException("No answers found");
             }
 
             TeamDistribution = answers.ToDictionary(answer => answer.Id.ToString(), elementSelector: (answer => CalculateSum(answer)));

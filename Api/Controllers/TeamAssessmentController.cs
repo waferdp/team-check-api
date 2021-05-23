@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using DomainModel;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Interface;
@@ -17,12 +18,19 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        public TeamAssessment CalculateTeam([FromQuery] TeamQuery query)
+        public ActionResult<TeamAssessment> CalculateTeam([FromQuery] TeamQuery query)
         {
             var answers = _teamAnswerRepository.GetAll();
             var matched = query.Match(answers);
-            var assessment = new TeamAssessment(matched);
-            return assessment;
+            try
+            {
+                var assessment = new TeamAssessment(matched);                
+                return assessment;
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
         }
     }
 }

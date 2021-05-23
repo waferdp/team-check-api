@@ -53,12 +53,10 @@ namespace DomainModel.Test
         }
 
         [Fact]
-        public void CreateTeamAssessment_WithNoAnswers_DoesntCrash()
+        public void CreateTeamAssessment_WithNoAnswers_ThrowsException()
         {
             var answers = new List<TeamAnswer>();
-            var assessment = new TeamAssessment(answers);
-            var serialized = JsonSerializer.Serialize(assessment);
-            Assert.NotEmpty(serialized);
+            Assert.ThrowsAny<Exception>(() => new TeamAssessment(answers));
         }
     }
 }
