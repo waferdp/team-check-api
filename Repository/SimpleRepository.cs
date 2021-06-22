@@ -12,7 +12,7 @@ namespace Repository
     public class SimpleRepository<T> : IRepository<T> where T : Entity
     {
         private MongoClient _client;
-        private IMongoDatabase _database;
+        protected IMongoDatabase _database;
         private ILogger<SimpleRepository<T>> _logger;
 
         public SimpleRepository(IConfiguration configuration, ILogger<SimpleRepository<T>> logger) 
@@ -56,7 +56,7 @@ namespace Repository
             }
         }
 
-        public IQueryable<T> GetAll()
+        public virtual IQueryable<T> GetAll()
         {
             _logger.LogInformation($"Retrieving all { GetTypeName() } from MongoDB ({_database.DatabaseNamespace})");
             try
@@ -95,7 +95,7 @@ namespace Repository
             }
         }
 
-        public async Task DeleteAsync(Guid id)
+        public virtual async Task DeleteAsync(Guid id)
         {
             _logger.LogInformation($"Deleting {GetTypeName()} in MongoDB ({_database.DatabaseNamespace})");
             try
