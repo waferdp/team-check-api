@@ -4,7 +4,10 @@ name: Azure App Service - jacob-team-check, Build and deploy DotnetCore app
 on:
   push:
     branches:
-      - main, feature/*
+      - main
+  pull-request:
+    branches:
+      - main
 
 jobs:
   build-test-and-deploy:
