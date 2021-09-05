@@ -48,7 +48,7 @@ jobs:
       with:
         files: '${{env.DOTNET_ROOT}}/myapp/appsettings.json'
       env:
-        ConnectionStrings:AppConfig: ${{ secrets.AZURE_CONFIG_CONNECTIONSTRING_BEC2FCC2DC4B4AF89409773F65C5C009 }}
+        ConnectionStrings.AppConfig: ${{ secrets.AZURE_CONFIG_CONNECTIONSTRING_BEC2FCC2DC4B4AF89409773F65C5C009 }}
 
 
     - name: Run Azure webapp deploy action using publish profile credentials
