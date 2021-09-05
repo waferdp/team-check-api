@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
 
 namespace Api
 {
@@ -14,7 +15,18 @@ namespace Api
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.ConfigureAppConfiguration(config =>
+                    {
+                        var settings = config.Build();
+                        var appConfigConnectionString = settings["ConnectionStrings:AppConfig"];
+                        if(!string.IsNullOrEmpty(appConfigConnectionString))
+                        {
+                            config.AddAzureAppConfiguration(options => 
+                                options.Connect(appConfigConnectionString).UseFeatureFlags());
+                        }
+                        
+                    }).UseStartup<Startup>();
                 });
+
     }
 }

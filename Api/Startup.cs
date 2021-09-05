@@ -5,6 +5,8 @@ using Microsoft.Extensions.Hosting;
 using Repository.Interface;
 using Repository;
 using DomainModel;
+using Microsoft.FeatureManagement;
+using Microsoft.Extensions.Configuration;
 
 namespace Api
 {
@@ -27,6 +29,8 @@ namespace Api
             });
             services.AddControllers();
             services.AddSwaggerGen();
+            services.AddAzureAppConfiguration();
+            services.AddFeatureManagement();
             InjectRepositories(services);
         }
 
@@ -37,7 +41,10 @@ namespace Api
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            else
+            {
+                app.UseAzureAppConfiguration();
+            }
             app.UseCors(CorsPolicyAllowEverything);
             app.UseRouting();
             app.UseSwagger(options =>

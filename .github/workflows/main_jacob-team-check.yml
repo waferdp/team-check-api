@@ -4,7 +4,7 @@ name: Azure App Service - jacob-team-check, Build and deploy DotnetCore app
 on:
   push:
     branches:
-      - main
+      - main, feature/*
 
 jobs:
   build-test-and-deploy:
@@ -38,6 +38,14 @@ jobs:
         files: '${{env.DOTNET_ROOT}}/myapp/appsettings.json'
       env:
         ConnectionStrings.server: ${{ secrets.AZURE_COSMOS_DB_CONNECTIONSTRING_95263D9A58B64AFFBB2E6128F18027C6 }}
+
+      #substitute production appsettings entries to appsettings json file
+    - name: App Settings Variable Substitution
+      uses: microsoft/variable-substitution@v1
+      with:
+        files: '${{env.DOTNET_ROOT}}/myapp/appsettings.json'
+      env:
+        ConnectionStrings:AppConfig: ${{ secrets.AZURE_CONFIG_CONNECTIONSTRING_BEC2FCC2DC4B4AF89409773F65C5C009 }}
 
 
     - name: Run Azure webapp deploy action using publish profile credentials

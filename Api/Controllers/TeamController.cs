@@ -5,6 +5,7 @@ using DomainModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Repository.Interface;
+using Microsoft.FeatureManagement.Mvc;
 
 namespace Api.Controllers 
 {
@@ -29,6 +30,7 @@ namespace Api.Controllers
         }
 
         [HttpGet("{id}")] 
+        [FeatureGate(FeatureFlags.GetTeamById)]
         public Team GetTeam(Guid id)
         {
             _logger.LogInformation("Get team by Id");

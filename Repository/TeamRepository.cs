@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using DomainModel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.FeatureManagement;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using Repository.Interface;
@@ -13,14 +14,18 @@ namespace Repository
     public class TeamRepository : SimpleRepository<Team>, ITeamRepository
     {
         private ILogger<TeamRepository> _logger;
+        private IFeatureManager _featureManager; 
         private FilterDefinition<Team> _getFilter;
         private bool _softDelete;
 
-        public TeamRepository(IConfiguration configuration, ILogger<TeamRepository> logger)
+        public TeamRepository(IConfiguration configuration, ILogger<TeamRepository> logger, IFeatureManager featureManager)
         : base(configuration, logger)
         {
             _logger = logger;
-            _softDelete = bool.Parse(configuration["Feature:SoftDelete"]);
+            _featureManager = featureManager;
+            var task = featureManager.IsEnabledAsync(FeatureFlags.SoftDelete);
+            task.Wait();
+            _softDelete = task.Result; 
             _getFilter = CreateNotDeletedFilter(_softDelete);
         }
 
