@@ -28,6 +28,14 @@ namespace Api.Controllers
             return allTeams; 
         }
 
+        [HttpGet("{id}")] 
+        public Team GetTeam(Guid id)
+        {
+            _logger.LogInformation("Get team by Id");
+            var team = _teamRepository.Get(id);
+            return team;
+        }
+
         [HttpPost]
         public async Task<Team> SaveTeam([FromBody] Team team)
         {
