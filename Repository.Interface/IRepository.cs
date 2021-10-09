@@ -8,7 +8,7 @@ namespace Repository.Interface
     public interface IRepository<T> where T : Entity
     {
         T Get(System.Guid id);
-        IQueryable<T> GetAll();
+        Task<IQueryable<T>> GetAllAsync();
         Task<T> SaveAsync(T entity);
         Task DeleteAsync(Guid id);
     }

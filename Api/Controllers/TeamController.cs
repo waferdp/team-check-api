@@ -22,15 +22,15 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Team> GetTeams()
+        public async Task<IEnumerable<Team>> GetTeams()
         {
             _logger.LogInformation("Get all teams");
-            var allTeams = _teamRepository.GetAll();
+            var allTeams = await _teamRepository.GetAllAsync();
             return allTeams; 
         }
 
         [HttpGet("{id}")] 
-        [FeatureGate(FeatureFlags.SoftDelete)]
+        [FeatureGate(FeatureToggle.SoftDelete)]
         public Team GetTeam(Guid id)
         {
             _logger.LogInformation("Get team by Id");

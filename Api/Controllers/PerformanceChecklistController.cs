@@ -30,10 +30,10 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<TeamAnswer> ListAnswers([FromQuery]TeamQuery query)
+        public async Task<IEnumerable<TeamAnswer>> GetForQuery([FromQuery]TeamQuery query)
         {
             _logger.LogInformation($"Get team answers");
-            var answers = _teamAnswerRepository.GetAll();
+            var answers = await _teamAnswerRepository.GetAllAsync();
             return query.Match(answers);
         }
 
