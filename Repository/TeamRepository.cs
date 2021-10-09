@@ -68,7 +68,7 @@ namespace Repository
         {
             if (_softDelete)
             {
-                await this.SoftDelete(id);
+                await this.SoftDeleteAsync(id);
             }
             else
             {
