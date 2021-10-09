@@ -68,18 +68,7 @@ namespace Repository
         {
             if (_softDelete)
             {
-                _logger.LogInformation($"Soft deleting team in MongoDB ({_database.DatabaseNamespace})");
-                try
-                {
-                    var team = await GetAsync(id);
-                    team.IsDeleted = true;
-                    await SaveAsync(team);
-                }
-                catch (MongoException ex)
-                {
-                    _logger.LogError($"Error (soft) deleting team with Id {id}: {ex.Message}", ex);
-                    throw;
-                }
+                await this.SoftDelete(id);
             }
             else
             {
@@ -88,11 +77,20 @@ namespace Repository
 
         }
 
-        private async Task SoftDelete(Guid id)
+        private async Task SoftDeleteAsync(Guid id)
         {
-            var team = await GetAsync(id);
-            team.IsDeleted = true;
-            await SaveAsync(team);
+            _logger.LogInformation($"Soft deleting team in MongoDB ({_database.DatabaseNamespace})");
+            try
+            {
+                var team = await GetAsync(id);
+                team.IsDeleted = true;
+                await SaveAsync(team);
+            }
+            catch (MongoException ex)
+            {
+                _logger.LogError($"Error (soft) deleting team with Id {id}: {ex.Message}", ex);
+                throw;
+            }
         }
 
         private FilterDefinition<Team> CreateNotDeletedFilter(bool softDelete)
