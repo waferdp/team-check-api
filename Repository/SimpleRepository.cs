@@ -56,12 +56,13 @@ namespace Repository
             }
         }
 
-        public virtual IQueryable<T> GetAll()
+        public virtual async Task<IQueryable<T>> GetAllAsync()
         {
             _logger.LogInformation($"Retrieving all { GetTypeName() } from MongoDB ({_database.DatabaseNamespace})");
             try
             {
-                var documents = GetCollection().AsQueryable();
+                //Makes the method async, which makes it overridable by other async methods
+                var documents = await Task.Run<IQueryable<T>>(() => GetCollection().AsQueryable());
                 return documents;
             } 
             catch(MongoException ex)

@@ -1,5 +1,6 @@
 using System;
 using System.Net;
+using System.Threading.Tasks;
 using DomainModel;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Interface;
@@ -18,9 +19,9 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        public ActionResult<TeamAssessment> CalculateTeam([FromQuery] TeamQuery query)
+        public async Task<ActionResult<TeamAssessment>> GetAssessmentForQuery([FromQuery] TeamQuery query)
         {
-            var answers = _teamAnswerRepository.GetAll();
+            var answers = await _teamAnswerRepository.GetAllAsync();
             var matched = query.Match(answers);
             try
             {
