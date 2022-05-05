@@ -30,7 +30,6 @@ namespace Api.Controllers
         }
 
         [HttpGet("{id}")] 
-        [FeatureGate(FeatureToggle.SoftDelete)]
         public Team GetTeam(Guid id)
         {
             _logger.LogInformation("Get team by Id");

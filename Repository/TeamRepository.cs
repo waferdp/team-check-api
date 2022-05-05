@@ -16,11 +16,10 @@ namespace Repository
         private ILogger<TeamRepository> _logger;
         private IFeatureManager _featureManager; 
 
-        public TeamRepository(IConfiguration configuration, ILogger<TeamRepository> logger, IFeatureManager featureManager)
+        public TeamRepository(IConfiguration configuration, ILogger<TeamRepository> logger)
         : base(configuration, logger)
         {
             _logger = logger;
-            _featureManager = featureManager;
         }
 
         public override async Task<IQueryable<Team>> GetAllAsync()
@@ -28,7 +27,7 @@ namespace Repository
             _logger.LogInformation($"Retrieving all Team:s from MongoDB ({_database.DatabaseNamespace})");
             try
             {
-                var getFilter = CreateNotDeletedFilter(await IsSoftDelete());
+                var getFilter = CreateNotDeletedFilter();
                 var documents = GetCollection().AsQueryable().Where(team => getFilter.Inject());
                 return documents;
             }
@@ -41,15 +40,7 @@ namespace Repository
 
         public override async Task DeleteAsync(Guid id)
         {
-            if (await IsSoftDelete())
-            {
-                await this.SoftDeleteAsync(id);
-            }
-            else
-            {
-                await base.DeleteAsync(id);
-            }
-
+            await this.SoftDeleteAsync(id);
         }
 
         private async Task SoftDeleteAsync(Guid id)
@@ -68,18 +59,9 @@ namespace Repository
             }
         }
 
-        private FilterDefinition<Team> CreateNotDeletedFilter(bool softDelete)
+        private FilterDefinition<Team> CreateNotDeletedFilter()
         {
-            if (softDelete)
-            {
-                return Builders<Team>.Filter.Eq(team => team.IsDeleted, false);
-            }
-            return Builders<Team>.Filter.Empty;
-        }
-
-        private async Task<bool> IsSoftDelete() 
-        {
-            return await _featureManager.IsEnabledAsync(FeatureToggle.SoftDelete); 
+            return Builders<Team>.Filter.Eq(team => team.IsDeleted, false);
         }
     }
 }
