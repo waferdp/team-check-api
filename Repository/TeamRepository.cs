@@ -28,7 +28,7 @@ namespace Repository
             try
             {
                 var getFilter = CreateNotDeletedFilter();
-                var documents = GetCollection().AsQueryable().Where(team => getFilter.Inject());
+                var documents = await Task.Run<IQueryable<Team>>(() => GetCollection().AsQueryable().Where(team => getFilter.Inject()));
                 return documents;
             }
             catch (MongoException ex)
