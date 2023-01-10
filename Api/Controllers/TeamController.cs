@@ -5,7 +5,6 @@ using DomainModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Repository.Interface;
-using Microsoft.FeatureManagement.Mvc;
 
 namespace Api.Controllers 
 {
