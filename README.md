@@ -5,7 +5,7 @@ The test is composed of 25 questions that are averaged across the team.
 ## Setup
 ### .NET
 
-Install .NET 5.0  
+Install .NET 6  
 
 ### MongoDB
 Install MongoDB  
@@ -59,3 +59,6 @@ Total score:
 \* The group is in Forming Stage if members are tentative, polite and somewhat passive.  
 \*\* The group is in Storming Stage if members are disagreeing with each other or the leader.  
 Read more about the stages on [Wikipedia](https://en.wikipedia.org/wiki/Tuckman%27s_stages_of_group_development)
+
+## Available on Github pages
+http://waferdp.github.io/team-check-web
