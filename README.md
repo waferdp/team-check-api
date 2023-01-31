@@ -60,5 +60,9 @@ Total score:
 \*\* The group is in Storming Stage if members are disagreeing with each other or the leader.  
 Read more about the stages on [Wikipedia](https://en.wikipedia.org/wiki/Tuckman%27s_stages_of_group_development)
 
-## Available on Github pages
+## Available online
+### Backend Swagger documentation (this repo)
+https://jacob-team-check.azurewebsites.net
+
+### Frontend (team-check-web)
 http://waferdp.github.io/team-check-web
