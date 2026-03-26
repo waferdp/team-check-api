@@ -47,10 +47,7 @@ namespace Api
             }
             app.UseCors(CorsPolicyAllowEverything);
             app.UseRouting();
-            app.UseSwagger(options =>
-            {
-                options.SerializeAsV2 = true;
-            });
+            app.UseSwagger();
             app.UseSwaggerUI(options => 
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "TeamCheck API v1");
