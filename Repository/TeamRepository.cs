@@ -2,10 +2,10 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using DomainModel;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
+using Repository.Configuration;
 
 namespace Repository
 {
@@ -13,7 +13,7 @@ namespace Repository
     {
         private ILogger<TeamRepository> _logger;
 
-        public TeamRepository(IConfiguration configuration, ILogger<TeamRepository> logger)
+        public TeamRepository(ConnectionStringsConfig configuration, ILogger<TeamRepository> logger)
         : base(configuration, logger)
         {
             _logger = logger;

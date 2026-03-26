@@ -1,11 +1,11 @@
 ﻿using System.Linq;
 using DomainModel;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using System.Threading.Tasks;
 using Repository.Interface;
 using System;
+using Repository.Configuration;
 
 namespace Repository
 {
@@ -15,11 +15,11 @@ namespace Repository
         protected IMongoDatabase _database;
         private ILogger<SimpleRepository<T>> _logger;
 
-        public SimpleRepository(IConfiguration configuration, ILogger<SimpleRepository<T>> logger) 
+        public SimpleRepository(ConnectionStringsConfig configuration, ILogger<SimpleRepository<T>> logger) 
         {
             _logger = logger;
-            var dbConnectionString = configuration["ConnectionStrings:server"];
-            var databaseName = configuration["ConnectionStrings:database"];
+            var dbConnectionString = configuration.Server;
+            var databaseName = configuration.Database;
             _client = new MongoClient(dbConnectionString);
             _database = _client.GetDatabase(databaseName);
         }

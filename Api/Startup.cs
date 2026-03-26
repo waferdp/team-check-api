@@ -7,6 +7,10 @@ using Repository;
 using DomainModel;
 using Microsoft.FeatureManagement;
 using Microsoft.Extensions.Configuration;
+using Repository.Configuration;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
+using MongoDB.Bson;
 
 namespace Api
 {
@@ -14,9 +18,25 @@ namespace Api
     {
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        private readonly string CorsPolicyAllowEverything = "allow_everything";
-        public void ConfigureServices(IServiceCollection services)
+        private static readonly string CorsPolicyAllowEverything = "allow_everything";
+        
+        public static void ConfigureBuilder(WebApplicationBuilder builder)
         {
+            var connectionStringsConfig = builder.Configuration.GetSection("ConnectionStrings").Get<ConnectionStringsConfig>();
+            builder.Services.AddSingleton(connectionStringsConfig);
+
+            if(!string.IsNullOrEmpty(connectionStringsConfig.AppConfig))
+            {
+                builder.Configuration.AddAzureAppConfiguration(options =>
+                    options.Connect(connectionStringsConfig.AppConfig).UseFeatureFlags());
+            }
+
+            ConfigureServices(builder.Services);
+        }
+        
+        private static void ConfigureServices(IServiceCollection services)
+        {
+            
             services.AddCors(options =>
             {
                 options.AddPolicy(CorsPolicyAllowEverything,
@@ -27,6 +47,8 @@ namespace Api
                                 .AllowAnyHeader();
                     });
             });
+
+            BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
             services.AddControllers();
             services.AddSwaggerGen();
             services.AddAzureAppConfiguration();
@@ -35,7 +57,7 @@ namespace Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -59,7 +81,7 @@ namespace Api
             });
         }
 
-        private void InjectRepositories(IServiceCollection services)
+        private static void InjectRepositories(IServiceCollection services)
         {
             services.AddScoped<IRepository<Team>, TeamRepository>();
             services.AddScoped<IRepository<TeamAnswer>, SimpleRepository<TeamAnswer>>();
